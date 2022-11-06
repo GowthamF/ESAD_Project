@@ -1,5 +1,7 @@
 
+using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
+using JobServices.BusinessEntities.Services;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
@@ -13,8 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+
 builder.Services.AddDbContext<DataBaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("JobServicesDB")));
 
+builder.Services.AddTransient(typeof(IDataBaseContext<>), typeof(DataBaseContextService<>));
 
 builder.Services.AddMediatR(Assembly.Load("JobServices.Application"));
 

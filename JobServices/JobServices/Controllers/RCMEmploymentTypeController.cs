@@ -1,4 +1,5 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.Application.Requests.Commands;
 using JobServices.Application.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -19,10 +20,35 @@ namespace JobServices.WebService.Controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("GetEmploymentTypes")]
         public async  Task<List<RCMEmploymentTypeDTO>> GetRCMEmploymentTypes()
         {
             return await _mediator.Send(new GetJobEmploymentTypesQuery());
         }
+
+        [HttpGet("GetRCMEmploymentTypeById/{employmentTypeId}")]
+        public async Task<RCMEmploymentTypeDTO> GetRCMEmploymentTypeById(int employmentTypeId)
+        {
+            return await _mediator.Send(new GetJobEmploymentTypeByIdQuery() { EmploymentTypeId = employmentTypeId});
+        }
+
+        [HttpPost("CreateEmploymentType")]
+        public async Task<RCMEmploymentTypeDTO> CreateEmploymentType([FromBody] string employmentTypeName)
+        {
+            return await _mediator.Send(new CreateJobEmploymentTypeCommand() { EmploymentTypeName = employmentTypeName});
+        }
+
+        [HttpPut("UpdateEmploymentType")]
+        public async Task<RCMEmploymentTypeDTO> UpdateEmploymentType([FromBody] RCMEmploymentTypeDTO employmentType)
+        {
+            return await _mediator.Send(new UpdateJobEmploymentTypeCommand() { EmploymentType = employmentType });
+        }
+
+        [HttpDelete("DeleteEmploymentType/{employmentTypeId}")]
+        public async Task<int> DeleteEmploymentType(int employmentTypeId)
+        {
+            return await _mediator.Send(new DeleteJobEmploymentTypeCommand() { EmploymentTypeId = employmentTypeId });
+        }
+
     }
 }

@@ -12,11 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Requests\Commands\Handlers\" />
-    <Folder Include="Responses\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\JobServices.BusinessEntities\JobServices.BusinessEntities.csproj" />
   </ItemGroup>
 

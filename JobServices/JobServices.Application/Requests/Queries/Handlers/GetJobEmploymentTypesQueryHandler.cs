@@ -1,6 +1,8 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,22 +11,20 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Queries.Handlers
 {
-    public class GetJobEmploymentTypesQueryHandler : RequestHandler<GetJobEmploymentTypesQuery, List<RCMEmploymentTypeDTO>>
+    public class GetJobEmploymentTypesQueryHandler : IRequestHandler<GetJobEmploymentTypesQuery, List<RCMEmploymentTypeDTO>>
     {
-        private readonly DataBaseContext _context;
+        private readonly IDataBaseContext<RCMEmploymentType> _context;
 
-        public GetJobEmploymentTypesQueryHandler(DataBaseContext context)
+        public GetJobEmploymentTypesQueryHandler(IDataBaseContext<RCMEmploymentType> context)
         {
             _context = context;
         }
 
-        protected override List<RCMEmploymentTypeDTO> Handle(GetJobEmploymentTypesQuery request)
+        public async Task<List<RCMEmploymentTypeDTO>> Handle(GetJobEmploymentTypesQuery request, CancellationToken cancellationToken)
         {
-            return _context.RCMEmploymentTypes
-                .ToList()
-                .Select(x => new RCMEmploymentTypeDTO() 
-                { EmploymentTypeId = x.Id, EmploymentTypeName = x.EmploymentTypeName })
-                .ToList();
+            var employmentTypes = await _context.List();
+
+            return employmentTypes.Select(x => new RCMEmploymentTypeDTO() { EmploymentTypeId = x.Id, EmploymentTypeName = x.EmploymentTypeName }).ToList();
         }
     }
 }
