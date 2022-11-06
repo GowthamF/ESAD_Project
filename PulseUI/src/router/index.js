@@ -1,5 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
+import DashboardView from "../views/DashboardView.vue";
+import RCMView from "../views/RCMView.vue";
 
 Vue.use(VueRouter);
 
@@ -7,11 +9,16 @@ const router = new VueRouter({
   mode: "history",
   base: import.meta.env.BASE_URL,
   routes: [
-    // {
-    //   path: "/",
-    //   name: "home",
-    //   component: HomeView,
-    // },
+    {
+      path: "/",
+      name: "dashboard",
+      component: DashboardView,
+    },
+    {
+      path: "/rcm",
+      name: "recruitment",
+      component: RCMView,
+    },
     // {
     //   path: "/about",
     //   name: "about",
