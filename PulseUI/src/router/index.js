@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
 import RCMView from "../views/RCMView.vue";
+import JobListingView from "../views/JobListingView.vue";
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,7 @@ const router = new VueRouter({
       path: "/rcm",
       name: "recruitment",
       component: RCMView,
+      children: [{ path: "job-listing", component: JobListingView }],
     },
     // {
     //   path: "/about",

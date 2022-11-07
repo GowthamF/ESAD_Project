@@ -12,17 +12,11 @@ export default({
   },
   setup() {
     const navigationStore = useNavigationStore()
+    navigationStore.addDefaultRoute();
     return { navigationStore }
   },
   data: () => ({
-      drawer: true,
-      group: null,
-      items :[
-          { title: 'Home', icon: 'mdi-home', routeName:"/" },
-          { title: 'eRecruitment', icon: 'mdi-image', routeName:"/rcm" },
-          { title: 'Onboarding', icon: 'mdi-help-box', routeName:"/onboarding" },
-          { title: 'Security', icon: 'mdi-help-box', routeName:"/security" },
-      ]
+           
   }),
   methods: {
     clickBtn : function(){

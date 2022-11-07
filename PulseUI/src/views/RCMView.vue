@@ -1,6 +1,6 @@
 <template>
   <div>
-    RCM
+    <router-view></router-view>
   </div>
 </template>
 
