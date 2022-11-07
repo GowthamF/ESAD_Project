@@ -1,4 +1,5 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.Application.Requests.Queries.Responses;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Queries
 {
-    public class GetJobByIdQuery : IRequest<RCMJobDTO>
+    public class GetJobByIdQuery : IRequest<GetJobResponseModel>
     {
         public int JobId
         {

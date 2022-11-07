@@ -13,7 +13,9 @@ export const useJobListingStore = defineStore("jobListingStore", {
           `${this.$state.jobServiceUrl}/RCMJobs/GetJobs`
         );
         this.$state.jobs = response.data;
-      } catch (error) {}
+      } catch (error) {
+        return [];
+      }
     },
   },
 });
