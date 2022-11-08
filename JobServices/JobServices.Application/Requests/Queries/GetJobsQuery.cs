@@ -11,5 +11,9 @@ namespace JobServices.Application.Requests.Queries
 {
     public class GetJobsQuery : IRequest<List<GetJobResponseModel>>
     {
+        public bool IsArchived
+        {
+            get; set;
+        }
     }
 }

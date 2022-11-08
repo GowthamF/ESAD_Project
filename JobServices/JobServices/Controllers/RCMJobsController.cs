@@ -20,10 +20,10 @@ namespace JobServices.WebService.Controllers
         }
 
 
-        [HttpGet("GetJobs")]
-        public async Task<List<GetJobResponseModel>> GetJobs()
+        [HttpGet("GetJobs/{isArchived}")]
+        public async Task<List<GetJobResponseModel>> GetJobs(bool isArchived)
         {
-            return await _mediator.Send(new GetJobsQuery());
+            return await _mediator.Send(new GetJobsQuery() { IsArchived = isArchived});
         }
 
         [HttpGet("GetJobById/{jobId}")]

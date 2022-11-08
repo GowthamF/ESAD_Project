@@ -27,8 +27,29 @@ namespace JobServices.Application.Requests.Commands.Handlers
             {
                 throw new Exception("Employment Type is required");
             }
-            
-            var entity = await _context.Update(new RCMJobs() { JobName = request.RCMJob.JobName, Id= request.RCMJob.Id});
+
+            var existingEntity = await _context.GetById(request.RCMJob.Id);
+
+            if (existingEntity != null)
+            {
+                existingEntity.IsArchived = request.RCMJob.IsArchived;
+
+                if (existingEntity.IsArchived)
+                {
+                    existingEntity.ArchiveDate = DateTimeOffset.Now;
+                }
+                else
+                {
+                    existingEntity.ArchiveDate = null;
+                }
+
+                existingEntity.IsPublic = request.RCMJob.IsPublic;
+                existingEntity.JobDescription = request.RCMJob.JobDescription;
+                existingEntity.JobName = request.RCMJob.JobName;
+                existingEntity.IsPublic = request.RCMJob.IsPublic;
+
+                var entity = await _context.Update(existingEntity);
+            }
 
             return new RCMJobDTO() {  };
         }

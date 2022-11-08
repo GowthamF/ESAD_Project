@@ -37,5 +37,15 @@ namespace JobServices.Application.Requests.Queries.Responses
         {
             get; set;
         }
+
+        public string JobDescription
+        {
+            get; set;
+        }
+
+        public bool IsArchived
+        {
+            get; set;
+        }
     }
 }

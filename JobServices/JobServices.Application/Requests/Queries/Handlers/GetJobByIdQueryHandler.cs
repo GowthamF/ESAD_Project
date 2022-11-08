@@ -29,7 +29,7 @@ namespace JobServices.Application.Requests.Queries.Handlers
             {
                 throw new Exception("No Job found for this ID " + request.JobId);
             }
-            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy")};
+            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"), JobDescription = job.JobDescription };
         }
     }
 }

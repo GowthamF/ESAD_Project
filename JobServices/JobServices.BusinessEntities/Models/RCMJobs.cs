@@ -25,6 +25,7 @@ namespace JobServices.BusinessEntities.Models
             get; set;
         }
 
+        [Required]
         public string JobDescription
         {
             get; set;
@@ -45,7 +46,7 @@ namespace JobServices.BusinessEntities.Models
             get; set;
         }
 
-        public DateTimeOffset ArchiveDate
+        public DateTimeOffset? ArchiveDate
         {
             get; set;
         }

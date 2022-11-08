@@ -43,10 +43,6 @@ namespace JobServices.Application.DTOs
             get; set;
         }
 
-        public string AddedBy
-        {
-            get; set;
-        }
 
         public DateTimeOffset AddedOn
         {

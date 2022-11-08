@@ -23,9 +23,9 @@ namespace JobServices.Application.Requests.Queries.Handlers
 
         public async Task<List<GetJobResponseModel>> Handle(GetJobsQuery request, CancellationToken cancellationToken)
         {
-            var jobs = await _context.List();
+            var jobs = await _context.List(x=>x.IsArchived == request.IsArchived);
 
-            return jobs.Select(job => new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>() { "Admin" ,"Admin1"}, PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy") }).ToList();
+            return jobs.Select(job => new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>() { "Admin" ,"Admin1"}, PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"),JobDescription = job.JobDescription, IsArchived = job.IsArchived }).ToList();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace JobServices.Application.Requests.Commands.Handlers
             var job = new RCMJobs() 
             { 
                 JobName = request.Job.JobName,
-                AddedBy = request.Job.AddedBy,
+                AddedBy = "Gowtham",
                 AddedOn = DateTimeOffset.Now,
                 IsArchived = false,
                 IsPublic = true,

@@ -1,5 +1,42 @@
 <template>
   <v-card>
+    <v-container fluid>
+      <v-row no-gutters>
+        <v-col class="d-flex" cols="12" sm="6" md="2">
+          <v-select
+            :items="jobViews"
+            solo
+            v-model="selectedView"
+            @change="changeView(selectedView)"
+          ></v-select>
+        </v-col>
+        <v-spacer></v-spacer>
+        <v-spacer></v-spacer>
+        <div>
+          <v-row align-content="end" justify="end">
+            <v-container fluid>
+              <v-btn text class="mb-2" color="primary"> Public Jobs </v-btn>
+              <v-btn text class="mb-2" color="primary"> Internal Jobs </v-btn>
+            </v-container>
+          </v-row>
+        </div>
+      </v-row>
+    </v-container>
+    <v-spacer></v-spacer>
+    <v-dialog
+      v-if="jobListingStore.dialog"
+      v-model="jobListingStore.dialog"
+      persistent
+      max-width="50%"
+      eager
+      attach
+    >
+      <JobCreation
+        @close-dialog="closeModel()"
+        @save-job="saveJob"
+        :edit-job="selectedJob"
+      ></JobCreation>
+    </v-dialog>
     <v-card-title>
       <v-text-field
         v-model="search"
@@ -8,6 +45,10 @@
         single-line
         hide-details
       ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-btn text color="primary" dark class="mb-2" @click="editJob()">
+        Add Job
+      </v-btn>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -15,117 +56,214 @@
       :search="search"
       sort-by="jobName"
     >
-    <template v-slot:item.status="{ item }">
-      <v-chip :color="'primary'">
-        {{ item.status }}
-      </v-chip>
-    </template>
-    <template v-slot:item.jobName="{ item }">
-      <b>{{item.jobName.toUpperCase()}}</b>
-    </template>
-    <template v-slot:item.hiringManagers="{ item }">
-      <v-row justify="start">
-      <div v-for="hiringManager of item.hiringManagers" :key="hiringManager">
-        <v-container fluid>
-          <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-avatar color="primary" size="25">
-          <v-icon v-bind="attrs"
-                  v-on="on" dark
+      <template v-slot:item.status="{ item }">
+        <v-chip :color="'primary'" outlined>
+          {{ item.status }}
+        </v-chip>
+      </template>
+      <template v-slot:item.jobName="{ item }">
+        <b>{{ item.jobName.toUpperCase() }}</b>
+      </template>
+      <template v-slot:item.hiringManagers="{ item }">
+        <v-row justify="start">
+          <div
+            v-for="hiringManager of item.hiringManagers"
+            :key="hiringManager"
           >
-            mdi-account-circle
-          </v-icon>
-        </v-avatar>
+            <v-container fluid>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-avatar color="primary" size="25">
+                    <v-icon v-bind="attrs" v-on="on" dark>
+                      mdi-account-circle
+                    </v-icon>
+                  </v-avatar>
+                </template>
+                <span>{{ hiringManager }}</span>
+              </v-tooltip>
+            </v-container>
+          </div>
+        </v-row>
+      </template>
+      <template v-slot:item.actions="{ item }">
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon small @click="editJob(item)" v-on="on" v-bind="attrs">
+              <v-icon dark small> mdi-pencil </v-icon>
+            </v-btn>
           </template>
-          <span>{{hiringManager}}</span>
+          <span>Edit Job</span>
         </v-tooltip>
-        </v-container>
-      </div>
-    </v-row>
-    </template>
-    <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        mdi-delete
-      </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        @click="initialize"
-      >
-        Reset
-      </v-btn>
-    </template>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              @click="deleteJob(item.id)"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon dark small> mdi-delete </v-icon>
+            </v-btn>
+          </template>
+          <span>Delete Job</span>
+        </v-tooltip>
+
+        <v-tooltip top v-if="!jobListingStore.isArchivedJobs">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              @click="archiveJob(item)"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon dark small> mdi-archive </v-icon>
+            </v-btn>
+          </template>
+          <span>Archive Job</span>
+        </v-tooltip>
+
+        <v-tooltip top v-if="jobListingStore.isArchivedJobs">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              small
+              @click="unArchiveJob(item)"
+              v-on="on"
+              v-bind="attrs"
+            >
+              <v-icon dark small> mdi-archive-remove </v-icon>
+            </v-btn>
+          </template>
+          <span>Unarchive Job</span>
+        </v-tooltip>
+      </template>
+      <template v-slot:no-data>
+        <!-- <v-progress-circular
+      indeterminate
+      color="primary"
+    ></v-progress-circular> -->
+      </template>
     </v-data-table>
   </v-card>
 </template>
 
 <script>
-    import { useJobListingStore } from '@/stores/job_listing'
-  export default {
-    setup() {
-        const jobListingStore = useJobListingStore()
-        
-        return { jobListingStore }
+import { useJobListingStore } from "@/stores/job_listing";
+import JobCreation from "../components/JobCreation.vue";
+export default {
+  components: {
+    JobCreation,
+  },
+  setup() {
+    const jobListingStore = useJobListingStore();
+
+    return { jobListingStore };
+  },
+  data() {
+    return {
+      search: "",
+      headers: [
+        {
+          text: "Job Name",
+          align: "start",
+          value: "jobName",
+        },
+        {
+          text: "Posting Date",
+          align: "start",
+          filterable: false,
+          value: "postingDate",
+        },
+        {
+          text: "Candidates",
+          align: "start",
+          filterable: false,
+          value: "candidates",
+        },
+        {
+          text: "Hiring Managers",
+          align: "start",
+          filterable: false,
+          value: "hiringManagers",
+        },
+        {
+          text: "Status",
+          align: "start",
+          filterable: false,
+          value: "status",
+        },
+        { text: "", value: "actions", sortable: false },
+      ],
+      isEdit: false,
+      selectedJob: null,
+      selectedView: "JobListings",
+      jobViews: [
+        {
+          text: "Job Listings",
+          value: "JobListings",
+        },
+        {
+          text: "Archived Jobs",
+          value: "ArchivedJobs",
+        },
+      ],
+    };
+  },
+  mounted() {
+    this.jobListingStore.getJobs();
+  },
+  computed: {
+    getJobs() {
+      return this.jobListingStore.jobs;
     },
-    data () {
-      return {
-        search: '',
-        headers: [
-          {
-            text: 'Job Name',
-            align: 'start',
-            value: 'jobName',
-          },
-          {
-            text: 'Posting Date',
-            align: 'start',
-            filterable: false,
-            value: 'postingDate',
-          },
-          {
-            text: 'Candidates',
-            align: 'start',
-            filterable: false,
-            value: 'candidates',
-          },
-          {
-            text: 'Hiring Managers',
-            align: 'start',
-            filterable: false,
-            value: 'hiringManagers',
-          },
-          {
-            text: 'Status',
-            align: 'start',
-            filterable: false,
-            value: 'status',
-          },
-          { text: '', value: 'actions', sortable: false },
-        ],
+  },
+  methods: {
+    editJob(job) {
+      if (job) {
+        this.selectedJob = job;
+        this.isEdit = true;
+      }
+
+      this.jobListingStore.dialog = true;
+    },
+    deleteJob(jobId) {
+      this.jobListingStore.deleteJob(jobId);
+    },
+    closeModel() {
+      this.jobListingStore.dialog = false;
+      this.isEdit = false;
+      this.selectedJob = null;
+    },
+    saveJob(job) {
+      if (this.isEdit) {
+        this.jobListingStore.editJob(job);
+        this.closeModel();
+      } else {
+        this.jobListingStore.addJob(job);
+        this.closeModel();
       }
     },
-    mounted(){
-        this.jobListingStore.getJobs();
+    archiveJob(job) {
+      job.isArchived = true;
+      this.jobListingStore.editJob(job);
     },
-    computed:{
-        getJobs(){
-            return this.jobListingStore.jobs;
-        }
-    }
-  }
+    unArchiveJob(job) {
+      job.isArchived = false;
+      this.jobListingStore.editJob(job);
+    },
+    changeView(selectedView) {
+      this.jobListingStore.isArchivedJobs = selectedView === "ArchivedJobs";
+      this.jobListingStore.getJobs();
+    },
+  },
+};
 </script>
 
-<style>
-
+<style scoped>
+.v-btn {
+  pointer-events: all;
+}
 </style>
