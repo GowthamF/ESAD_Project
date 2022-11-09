@@ -15,8 +15,22 @@
         <div>
           <v-row align-content="end" justify="end">
             <v-container fluid>
-              <v-btn text class="mb-2" color="primary"> Public Jobs </v-btn>
-              <v-btn text class="mb-2" color="primary"> Internal Jobs </v-btn>
+              <v-btn
+                text
+                class="mb-2"
+                color="primary"
+                @click="openPublicJobs()"
+              >
+                Public Jobs
+              </v-btn>
+              <v-btn
+                text
+                class="mb-2"
+                color="primary"
+                @click="openInternalJobs()"
+              >
+                Internal Jobs
+              </v-btn>
             </v-container>
           </v-row>
         </div>
@@ -172,6 +186,12 @@ export default {
           value: "jobName",
         },
         {
+          text: "Closing Date",
+          align: "start",
+          filterable: false,
+          value: "closingDate",
+        },
+        {
           text: "Posting Date",
           align: "start",
           filterable: false,
@@ -257,6 +277,12 @@ export default {
     changeView(selectedView) {
       this.jobListingStore.isArchivedJobs = selectedView === "ArchivedJobs";
       this.jobListingStore.getJobs();
+    },
+    openPublicJobs() {
+      window.open(`${window.location.origin}/public-jobs`);
+    },
+    openInternalJobs() {
+      window.open(`${window.location.origin}/internal-jobs`);
     },
   },
 };

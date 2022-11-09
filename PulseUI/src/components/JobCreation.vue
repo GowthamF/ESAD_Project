@@ -23,22 +23,60 @@
               clear-icon="mdi-close-circle"
               label="Job Description"
             ></v-textarea>
-            <v-row class="d-flex">
+            <v-row class="d-flex mb-6">
               <v-col>
                 <v-select
-                  :items="jobViews"
+                  :items="[]"
                   outlined
-                  v-model="selectedView"
                   label="Employment Type"
                 ></v-select>
               </v-col>
+
               <v-col>
                 <v-select
-                  :items="jobViews"
+                  :items="[]"
                   outlined
-                  v-model="selectedView"
                   label="Compensation Type"
                 ></v-select>
+              </v-col>
+              <v-col>
+                <v-dialog
+                  ref="dialog"
+                  v-model="modal"
+                  :return-value.sync="selectedDate"
+                  persistent
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="selectedDate"
+                      label="Closing Date"
+                      append-icon="mdi-calendar"
+                      readonly
+                      outlined
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="jobClosingDateRule"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="initialDate"
+                    scrollable
+                    color="primary"
+                  >
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="modal = false">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      text
+                      color="primary"
+                      @click="$refs.dialog.save(initialDate)"
+                    >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-dialog>
               </v-col>
             </v-row>
             <v-btn outlined color="primary" @click="isPublic = !isPublic">
@@ -64,17 +102,26 @@ export default {
       this.$emit("close-dialog");
     },
     save() {
-      this.$emit("save-job", {
-        id: this.jobId,
-        jobName: this.jobName,
-        jobDescription: this.jobDescription,
-        isPublic: this.isPublic,
-        isEdit: this.editJob ? true : false,
-      });
+      var isValid = this.$refs.form.validate();
+      if (isValid) {
+        this.$emit("save-job", {
+          id: this.jobId,
+          jobName: this.jobName,
+          jobDescription: this.jobDescription,
+          isPublic: this.isPublic,
+          isEdit: this.editJob ? true : false,
+          closingDate: this.selectedDate,
+        });
+      }
     },
   },
   data: () => ({
     valid: false,
+    selectedDate: null,
+    initialDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+      .toISOString()
+      .substring(0, 10),
+    modal: false,
     jobName: "",
     jobId: 0,
     jobDescription: "",
@@ -84,6 +131,7 @@ export default {
       (v) => !!v || "Job Description is required",
       (v) => (v || "").length <= 50 || "Max 50 characters",
     ],
+    jobClosingDateRule: [(v) => !!v || "Job Closing Date is required"],
   }),
   props: {
     editJob: {
@@ -96,6 +144,7 @@ export default {
     this.jobDescription = this.editJob ? this.editJob.jobDescription : "";
     this.isPublic = this.editJob ? this.editJob.isPublic : false;
     this.jobId = this.editJob ? this.editJob.id : 0;
+    this.selectedDate = this.editJob ? this.editJob.closingDate : null;
   },
 };
 </script>

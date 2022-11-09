@@ -1,5 +1,5 @@
 ﻿using JobServices.Application.DTOs;
-using JobServices.Application.Requests.Queries.Responses;
+using JobServices.Application.Requests.Queries.ResponseModel;
 using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
 using MediatR;
@@ -25,7 +25,7 @@ namespace JobServices.Application.Requests.Queries.Handlers
         {
             var jobs = await _context.List(x=>x.IsArchived == request.IsArchived);
 
-            return jobs.Select(job => new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>() { "Admin" ,"Admin1"}, PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"),JobDescription = job.JobDescription, IsArchived = job.IsArchived }).ToList();
+            return jobs.Select(job => new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>() { "Admin" ,"Admin1"}, PostingDate = job.PublishedDate.Date.ToString("yyyy-MM-dd"),JobDescription = job.JobDescription, IsArchived = job.IsArchived, ClosingDate = job.ClosingDate.Date.ToString("yyyy-MM-dd"), IsPublic = job.IsPublic }).ToList();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.Application.Requests.Commands.RequestModel;
+using JobServices.Application.Requests.Commands.ResponseModel;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Commands
 {
-    public class CreateJobCommand : IRequest<RCMJobDTO>
+    public class CreateJobCommand : IRequest<CreateJobCommandResponseModel>
     {
-        public RCMJobDTO Job
+        public CreateJobCommandRequestModel Job
         {
             get; set;
         }

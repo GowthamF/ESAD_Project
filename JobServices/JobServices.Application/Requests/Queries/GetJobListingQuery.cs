@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Queries
 {
-    public class GetJobsQuery : IRequest<List<GetJobResponseModel>>
+    public class GetJobListingQuery : IRequest<List<GetJobListingResponseModel>>
     {
-        public bool IsArchived
+        public bool IsPublic
         {
             get; set;
         }

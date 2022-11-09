@@ -7,6 +7,8 @@ export const useJobListingStore = defineStore("jobListingStore", {
     jobs: [],
     dialog: false,
     isArchivedJobs: false,
+    publicJobs: [],
+    internalJobs: [],
   }),
   actions: {
     async getJobs() {
@@ -45,6 +47,34 @@ export const useJobListingStore = defineStore("jobListingStore", {
         );
         this.getJobs();
       } catch (error) {}
+    },
+    async deleteJob(jobId) {
+      try {
+        var response = await axios.delete(
+          `${this.$state.jobServiceUrl}/RCMJobs/DeleteJob/${jobId}`
+        );
+        this.getJobs();
+      } catch (error) {}
+    },
+    async getPublicJobs() {
+      try {
+        var response = await axios.get(
+          `${this.$state.jobServiceUrl}/JobListing/GetPublicJobs`
+        );
+        this.$state.publicJobs = response.data;
+      } catch (error) {
+        return [];
+      }
+    },
+    async getInternalJobs() {
+      try {
+        var response = await axios.get(
+          `${this.$state.jobServiceUrl}/JobListing/GetInternalJobs`
+        );
+        this.$state.internalJobs = response.data;
+      } catch (error) {
+        return [];
+      }
     },
   },
 });

@@ -1,5 +1,5 @@
 ﻿using JobServices.Application.DTOs;
-using JobServices.Application.Requests.Queries.Responses;
+using JobServices.Application.Requests.Queries.ResponseModel;
 using MediatR;
 using System;
 using System.Collections.Generic;

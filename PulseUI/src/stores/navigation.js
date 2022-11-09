@@ -11,7 +11,7 @@ export const useNavigationStore = defineStore("navigationStore", {
       {
         title: "eRecruitment",
         icon: "mdi-image",
-        routeName: "/rcm",
+        routeName: "/rcm/job-listing",
       },
       { title: "Onboarding", icon: "mdi-help-box", routeName: "/onboarding" },
       { title: "Security", icon: "mdi-help-box", routeName: "/security" },

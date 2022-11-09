@@ -1,4 +1,5 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.Application.Requests.Commands.ResponseModel;
 using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
 using MediatR;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Commands.Handlers
 {
-    public class UpdateJobCommandHandler : IRequestHandler<UpdateJobCommand, RCMJobDTO>
+    public class UpdateJobCommandHandler : IRequestHandler<UpdateJobCommand, UpdateJobCommandResponseModel>
     {
         private readonly IDataBaseContext<RCMJobs> _context;
 
@@ -21,7 +22,7 @@ namespace JobServices.Application.Requests.Commands.Handlers
         }
 
 
-        public async Task<RCMJobDTO> Handle(UpdateJobCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateJobCommandResponseModel> Handle(UpdateJobCommand request, CancellationToken cancellationToken)
         {
             if (request.RCMJob == null)
             {
@@ -46,12 +47,12 @@ namespace JobServices.Application.Requests.Commands.Handlers
                 existingEntity.IsPublic = request.RCMJob.IsPublic;
                 existingEntity.JobDescription = request.RCMJob.JobDescription;
                 existingEntity.JobName = request.RCMJob.JobName;
-                existingEntity.IsPublic = request.RCMJob.IsPublic;
+                existingEntity.ClosingDate = request.RCMJob.ClosingDate;
 
                 var entity = await _context.Update(existingEntity);
             }
 
-            return new RCMJobDTO() {  };
+            return new UpdateJobCommandResponseModel();
         }
     }
 }

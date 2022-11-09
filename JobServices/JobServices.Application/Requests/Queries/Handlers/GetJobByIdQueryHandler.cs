@@ -1,5 +1,5 @@
 ﻿using JobServices.Application.DTOs;
-using JobServices.Application.Requests.Queries.Responses;
+using JobServices.Application.Requests.Queries.ResponseModel;
 using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
 using MediatR;
@@ -29,7 +29,7 @@ namespace JobServices.Application.Requests.Queries.Handlers
             {
                 throw new Exception("No Job found for this ID " + request.JobId);
             }
-            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"), JobDescription = job.JobDescription };
+            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"), JobDescription = job.JobDescription, ClosingDate = job.ClosingDate.Date.ToString("dd-MM-yyyy") , IsPublic = job.IsPublic };
         }
     }
 }

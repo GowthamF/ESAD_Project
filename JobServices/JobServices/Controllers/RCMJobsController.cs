@@ -1,7 +1,9 @@
 ﻿using JobServices.Application.DTOs;
 using JobServices.Application.Requests.Commands;
+using JobServices.Application.Requests.Commands.RequestModel;
+using JobServices.Application.Requests.Commands.ResponseModel;
 using JobServices.Application.Requests.Queries;
-using JobServices.Application.Requests.Queries.Responses;
+using JobServices.Application.Requests.Queries.ResponseModel;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,13 +35,13 @@ namespace JobServices.WebService.Controllers
         }
 
         [HttpPost("CreateJob")]
-        public async Task<RCMJobDTO> CreateJob([FromBody] RCMJobDTO job)
+        public async Task<CreateJobCommandResponseModel> CreateJob([FromBody] CreateJobCommandRequestModel job)
         {
             return await _mediator.Send(new CreateJobCommand() {    Job = job });
         }
 
         [HttpPut("UpdateJob")]
-        public async Task<RCMJobDTO> UpdateJob([FromBody] RCMJobDTO job)
+        public async Task<UpdateJobCommandResponseModel> UpdateJob([FromBody] UpdateJobCommandRequestModel job)
         {
             return await _mediator.Send(new UpdateJobCommand() { RCMJob = job });
         }

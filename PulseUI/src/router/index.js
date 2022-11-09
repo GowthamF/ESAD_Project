@@ -1,8 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import DashboardView from "../views/DashboardView.vue";
+import HomeView from "../views/HomeView.vue";
 import RCMView from "../views/RCMView.vue";
 import JobListingView from "../views/JobListingView.vue";
+import JobsNavigationView from "../views/JobsNavigationView.vue";
+import JobsView from "../views/JobsView.vue";
 
 Vue.use(VueRouter);
 
@@ -13,13 +16,28 @@ const router = new VueRouter({
     {
       path: "/",
       name: "dashboard",
-      component: DashboardView,
+      component: HomeView,
+      children: [
+        {
+          path: "rcm",
+          component: RCMView,
+          children: [{ path: "job-listing", component: JobListingView }],
+        },
+      ],
     },
     {
-      path: "/rcm",
+      path: "/public-jobs",
       name: "recruitment",
-      component: RCMView,
-      children: [{ path: "job-listing", component: JobListingView }],
+      component: JobsNavigationView,
+      children: [{ path: "", component: JobsView, props: { isPublic: true } }],
+      props: { isPublic: true },
+    },
+    {
+      path: "/internal-jobs",
+      name: "recruitment",
+      component: JobsNavigationView,
+      children: [{ path: "", component: JobsView, props: { isPublic: false } }],
+      props: { isPublic: false },
     },
     // {
     //   path: "/about",

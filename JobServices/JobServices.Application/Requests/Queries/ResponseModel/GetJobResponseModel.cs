@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JobServices.Application.DTOs
+namespace JobServices.Application.Requests.Queries.ResponseModel
 {
-    public class RCMJobDTO
+    public class GetJobResponseModel
     {
         public int Id
         {
@@ -18,17 +18,27 @@ namespace JobServices.Application.DTOs
             get; set;
         }
 
+        public int Candidates
+        {
+            get; set;
+        }
+
+        public string PostingDate
+        {
+            get; set;
+        }
+
+        public List<string> HiringManagers
+        {
+            get; set;
+        }
+
+        public string Status
+        {
+            get; set;
+        }
+
         public string JobDescription
-        {
-            get; set;
-        }
-
-        public DateTimeOffset PublishedDate
-        {
-            get; set;
-        }
-
-        public bool IsPublic
         {
             get; set;
         }
@@ -38,13 +48,12 @@ namespace JobServices.Application.DTOs
             get; set;
         }
 
-        public DateTimeOffset ArchiveDate
+        public string ClosingDate
         {
             get; set;
         }
 
-
-        public DateTimeOffset AddedOn
+        public bool IsPublic
         {
             get; set;
         }

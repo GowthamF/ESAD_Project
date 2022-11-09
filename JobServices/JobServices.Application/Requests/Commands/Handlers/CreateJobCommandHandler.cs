@@ -1,4 +1,6 @@
 ﻿using JobServices.Application.DTOs;
+using JobServices.Application.Requests.Commands.RequestModel;
+using JobServices.Application.Requests.Commands.ResponseModel;
 using JobServices.BusinessEntities.Interfaces;
 using JobServices.BusinessEntities.Models;
 using MediatR;
@@ -10,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace JobServices.Application.Requests.Commands.Handlers
 {
-    public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, RCMJobDTO>
+    public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, CreateJobCommandResponseModel>
     {
         private readonly IDataBaseContext<RCMJobs> _context;
 
@@ -19,7 +21,7 @@ namespace JobServices.Application.Requests.Commands.Handlers
             _context = context;
         }
 
-        public async Task<RCMJobDTO> Handle(CreateJobCommand request, CancellationToken cancellationToken)
+        public async Task<CreateJobCommandResponseModel> Handle(CreateJobCommand request, CancellationToken cancellationToken)
         {
             if (request.Job == null)
             {
@@ -34,11 +36,12 @@ namespace JobServices.Application.Requests.Commands.Handlers
                 IsPublic = true,
                 JobDescription = request.Job.JobDescription,
                 PublishedDate = DateTimeOffset.Now,
+                ClosingDate = request.Job.ClosingDate
             };
 
             await _context.Create(job);
 
-            return new RCMJobDTO() { JobName = job.JobName };
+            return new CreateJobCommandResponseModel() { JobName = job.JobName };
         }
     }
 }
