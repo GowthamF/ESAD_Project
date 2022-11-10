@@ -6,6 +6,7 @@ import RCMView from "../views/RCMView.vue";
 import JobListingView from "../views/JobListingView.vue";
 import JobsNavigationView from "../views/JobsNavigationView.vue";
 import JobsView from "../views/JobsView.vue";
+import LoginView from "../views/LoginView.vue";
 
 Vue.use(VueRouter);
 
@@ -17,11 +18,16 @@ const router = new VueRouter({
       path: "/",
       name: "dashboard",
       component: HomeView,
+
       children: [
         {
           path: "rcm",
           component: RCMView,
           children: [{ path: "job-listing", component: JobListingView }],
+        },
+        {
+          path: "",
+          component: DashboardView,
         },
       ],
     },
@@ -39,6 +45,11 @@ const router = new VueRouter({
       children: [{ path: "", component: JobsView, props: { isPublic: false } }],
       props: { isPublic: false },
     },
+    {
+      path: "/login",
+      name: "Login",
+      component: LoginView,
+    },
     // {
     //   path: "/about",
     //   name: "about",
@@ -48,6 +59,12 @@ const router = new VueRouter({
     //   component: () => import("../views/AboutView.vue"),
     // },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  var isAuthenticated = localStorage.getItem("user-token");
+  if (to.name !== "Login" && !isAuthenticated) next({ name: "Login" });
+  else next();
 });
 
 export default router;
