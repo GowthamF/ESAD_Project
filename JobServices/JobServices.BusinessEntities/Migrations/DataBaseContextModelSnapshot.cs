@@ -22,23 +22,6 @@ namespace JobServices.BusinessEntities.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("JobServices.BusinessEntities.Models.RCMCompensationType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CompensationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RCMCompensationTypes");
-                });
-
             modelBuilder.Entity("JobServices.BusinessEntities.Models.RCMEmploymentType", b =>
                 {
                     b.Property<int>("Id")
@@ -93,6 +76,9 @@ namespace JobServices.BusinessEntities.Migrations
 
                     b.Property<DateTimeOffset>("PublishedDate")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<int>("RCMEmploymentTypeId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

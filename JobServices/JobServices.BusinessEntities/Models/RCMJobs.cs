@@ -65,5 +65,10 @@ namespace JobServices.BusinessEntities.Models
         {
             get; set;
         }
+
+        public int RCMEmploymentTypeId
+        {
+            get; set;
+        }
     }
 }

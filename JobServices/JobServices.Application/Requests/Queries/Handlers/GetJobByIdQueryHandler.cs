@@ -15,10 +15,12 @@ namespace JobServices.Application.Requests.Queries.Handlers
     public class GetJobByIdQueryHandler : IRequestHandler<GetJobByIdQuery, GetJobResponseModel>
     {
         private readonly IDataBaseContext<RCMJobs> _context;
+        private readonly IDataBaseContext<RCMEmploymentType> _employmentTypecontext;
 
-        public GetJobByIdQueryHandler(IDataBaseContext<RCMJobs> context)
+        public GetJobByIdQueryHandler(IDataBaseContext<RCMJobs> context, IDataBaseContext<RCMEmploymentType> employmentTypecontext)
         {
             _context = context;
+            _employmentTypecontext = employmentTypecontext;
         }
 
         public async Task<GetJobResponseModel> Handle(GetJobByIdQuery request, CancellationToken cancellationToken)
@@ -29,7 +31,9 @@ namespace JobServices.Application.Requests.Queries.Handlers
             {
                 throw new Exception("No Job found for this ID " + request.JobId);
             }
-            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"), JobDescription = job.JobDescription, ClosingDate = job.ClosingDate.Date.ToString("dd-MM-yyyy") , IsPublic = job.IsPublic };
+            var employmentType =await _employmentTypecontext.GetById(job.RCMEmploymentTypeId);
+
+            return new GetJobResponseModel() { Id = job.Id, JobName = job.JobName, Status = "OPEN", Candidates = 0, HiringManagers = new List<string>(), PostingDate = job.PublishedDate.Date.ToString("dd-MM-yyyy"), JobDescription = job.JobDescription, ClosingDate = job.ClosingDate.Date.ToString("dd-MM-yyyy") , IsPublic = job.IsPublic,EmploymentTypeId = employmentType.Id };
         }
     }
 }

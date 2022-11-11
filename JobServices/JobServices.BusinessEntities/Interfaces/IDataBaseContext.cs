@@ -15,6 +15,7 @@ namespace JobServices.BusinessEntities.Interfaces
         Task<T> Create(T entity);
         Task<T> Delete(T entity);
         Task<T> Update(T entity);
+
     }
 
     public abstract class EntityBase

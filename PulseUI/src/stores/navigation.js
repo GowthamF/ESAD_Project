@@ -6,6 +6,7 @@ import { defineStore } from "pinia";
 export const useNavigationStore = defineStore("navigationStore", {
   state: () => ({
     currentRoute: "/",
+    title: "Home",
     items: [
       { title: "Home", icon: "mdi-home", routeName: "/", isHome: true },
       {
@@ -24,8 +25,16 @@ export const useNavigationStore = defineStore("navigationStore", {
       {
         title: "Admin",
         icon: "mdi-help-box",
-        routeName: "/rcm/admin",
+        routeName: null,
         moduleName: "RCM",
+        group: [
+          {
+            title: "Employment Types",
+            icon: "mdi-help-box",
+            routeName: "/rcm/admin/employment-types",
+            moduleName: "RCM",
+          },
+        ],
       },
     ],
   }),
@@ -41,14 +50,16 @@ export const useNavigationStore = defineStore("navigationStore", {
     },
   },
   actions: {
-    navigateToRoute(routeName) {
+    navigateToRoute(routeName, title) {
       if (this.$state.currentRoute !== routeName) {
         this.$router.push(routeName);
         this.$state.currentRoute = this.$router.currentRoute.fullPath;
+        this.$state.title = title;
       }
     },
     addDefaultRoute() {
       this.$state.currentRoute = this.$router.currentRoute.fullPath;
+      this.$state.title = this.$router.currentRoute.fullPath;
     },
   },
 });

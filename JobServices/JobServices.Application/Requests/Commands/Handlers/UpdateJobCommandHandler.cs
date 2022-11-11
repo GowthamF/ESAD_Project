@@ -48,7 +48,8 @@ namespace JobServices.Application.Requests.Commands.Handlers
                 existingEntity.JobDescription = request.RCMJob.JobDescription;
                 existingEntity.JobName = request.RCMJob.JobName;
                 existingEntity.ClosingDate = request.RCMJob.ClosingDate;
-
+                existingEntity.RCMEmploymentTypeId = request.RCMJob.EmploymentTypeId;
+                    
                 var entity = await _context.Update(existingEntity);
             }
 

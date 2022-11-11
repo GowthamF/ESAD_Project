@@ -15,10 +15,12 @@ namespace JobServices.Application.Requests.Commands.Handlers
     public class CreateJobCommandHandler : IRequestHandler<CreateJobCommand, CreateJobCommandResponseModel>
     {
         private readonly IDataBaseContext<RCMJobs> _context;
+        private readonly IDataBaseContext<RCMEmploymentType> _employmentTypecontext;
 
-        public CreateJobCommandHandler(IDataBaseContext<RCMJobs> context)
+        public CreateJobCommandHandler(IDataBaseContext<RCMJobs> context , IDataBaseContext<RCMEmploymentType> dataBaseContext)
         {
             _context = context;
+            _employmentTypecontext = dataBaseContext;
         }
 
         public async Task<CreateJobCommandResponseModel> Handle(CreateJobCommand request, CancellationToken cancellationToken)
@@ -27,6 +29,9 @@ namespace JobServices.Application.Requests.Commands.Handlers
             {
                 throw new Exception("Job Name is required");
             }
+
+            
+
             var job = new RCMJobs() 
             { 
                 JobName = request.Job.JobName,
@@ -36,7 +41,8 @@ namespace JobServices.Application.Requests.Commands.Handlers
                 IsPublic = true,
                 JobDescription = request.Job.JobDescription,
                 PublishedDate = DateTimeOffset.Now,
-                ClosingDate = request.Job.ClosingDate
+                ClosingDate = request.Job.ClosingDate,
+                RCMEmploymentTypeId = request.Job.EmploymentTypeId
             };
 
             await _context.Create(job);

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JobServices.BusinessEntities.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20221106074356_Initial")]
-    partial class Initial
+    [Migration("20221111142556_Add Employment Type 2")]
+    partial class AddEmploymentType2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,23 +23,6 @@ namespace JobServices.BusinessEntities.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("JobServices.BusinessEntities.Models.RCMCompensationType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CompensationName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RCMCompensationTypes");
-                });
 
             modelBuilder.Entity("JobServices.BusinessEntities.Models.RCMEmploymentType", b =>
                 {
@@ -60,11 +43,11 @@ namespace JobServices.BusinessEntities.Migrations
 
             modelBuilder.Entity("JobServices.BusinessEntities.Models.RCMJobs", b =>
                 {
-                    b.Property<int>("JobId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AddedBy")
                         .IsRequired()
@@ -73,7 +56,10 @@ namespace JobServices.BusinessEntities.Migrations
                     b.Property<DateTimeOffset>("AddedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<DateTimeOffset>("ArchiveDate")
+                    b.Property<DateTimeOffset?>("ArchiveDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("ClosingDate")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<bool>("IsArchived")
@@ -93,7 +79,10 @@ namespace JobServices.BusinessEntities.Migrations
                     b.Property<DateTimeOffset>("PublishedDate")
                         .HasColumnType("datetimeoffset");
 
-                    b.HasKey("JobId");
+                    b.Property<int>("RCMEmploymentTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.ToTable("RCMJobs");
                 });

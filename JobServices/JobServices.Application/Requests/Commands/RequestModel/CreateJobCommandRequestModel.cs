@@ -53,5 +53,10 @@ namespace JobServices.Application.Requests.Commands.RequestModel
         {
             get; set;
         }
+
+        public int EmploymentTypeId
+        {
+            get; set;
+        }
     }
 }

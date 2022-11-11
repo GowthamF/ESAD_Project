@@ -20,7 +20,10 @@ namespace JobServices.BusinessEntities.Services
 
         public virtual async Task<IEnumerable<T>> List()
         {
-            return await _dbContext.Set<T>().ToListAsync();
+            var db = _dbContext.Set<T>();
+
+
+            return await db.ToListAsync();
         }
 
         public virtual async Task<IEnumerable<T>> List(System.Linq.Expressions.Expression<Func<T, bool>> predicate)
@@ -53,5 +56,6 @@ namespace JobServices.BusinessEntities.Services
 
             return entity;
         }
+
     }
 }

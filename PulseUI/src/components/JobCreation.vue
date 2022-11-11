@@ -26,19 +26,13 @@
             <v-row class="d-flex mb-6">
               <v-col>
                 <v-select
-                  :items="[]"
+                  v-model="selectedEmploymentType"
+                  :items="employmentTypes"
                   outlined
                   label="Employment Type"
                 ></v-select>
               </v-col>
 
-              <v-col>
-                <v-select
-                  :items="[]"
-                  outlined
-                  label="Compensation Type"
-                ></v-select>
-              </v-col>
               <v-col>
                 <v-dialog
                   ref="dialog"
@@ -111,11 +105,13 @@ export default {
           isPublic: this.isPublic,
           isEdit: this.editJob ? true : false,
           closingDate: this.selectedDate,
+          employmentTypeId: this.selectedEmploymentType,
         });
       }
     },
   },
   data: () => ({
+    selectedEmploymentType: null,
     valid: false,
     selectedDate: null,
     initialDate: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
@@ -138,6 +134,10 @@ export default {
       type: Object,
       default: null,
     },
+    employmentTypes: {
+      type: Array,
+      default: [],
+    },
   },
   mounted() {
     this.jobName = this.editJob ? this.editJob.jobName : "";
@@ -145,6 +145,9 @@ export default {
     this.isPublic = this.editJob ? this.editJob.isPublic : false;
     this.jobId = this.editJob ? this.editJob.id : 0;
     this.selectedDate = this.editJob ? this.editJob.closingDate : null;
+    this.selectedEmploymentType = this.editJob
+      ? this.editJob.employmentTypeId
+      : null;
   },
 };
 </script>

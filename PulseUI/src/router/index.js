@@ -7,6 +7,7 @@ import JobListingView from "../views/JobListingView.vue";
 import JobsNavigationView from "../views/JobsNavigationView.vue";
 import JobsView from "../views/JobsView.vue";
 import LoginView from "../views/LoginView.vue";
+import EmploymentTypesView from "../views/EmploymentTypesView.vue";
 
 Vue.use(VueRouter);
 
@@ -23,7 +24,16 @@ const router = new VueRouter({
         {
           path: "rcm",
           component: RCMView,
-          children: [{ path: "job-listing", component: JobListingView }],
+          children: [
+            { path: "job-listing", component: JobListingView },
+            {
+              path: "admin",
+              component: RCMView,
+              children: [
+                { path: "employment-types", component: EmploymentTypesView },
+              ],
+            },
+          ],
         },
         {
           path: "",

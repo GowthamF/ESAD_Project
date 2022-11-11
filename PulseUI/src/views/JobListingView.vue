@@ -49,6 +49,7 @@
         @close-dialog="closeModel()"
         @save-job="saveJob"
         :edit-job="selectedJob"
+        :employment-types="getEmploymentTypes"
       ></JobCreation>
     </v-dialog>
     <v-card-title>
@@ -70,15 +71,15 @@
       :search="search"
       sort-by="jobName"
     >
-      <template v-slot:item.status="{ item }">
+      <template v-slot:[`item.status`]="{ item }">
         <v-chip :color="'primary'" outlined>
           {{ item.status }}
         </v-chip>
       </template>
-      <template v-slot:item.jobName="{ item }">
+      <template v-slot:[`item.jobName`]="{ item }">
         <b>{{ item.jobName.toUpperCase() }}</b>
       </template>
-      <template v-slot:item.hiringManagers="{ item }">
+      <template v-slot:[`item.hiringManagers`]="{ item }">
         <v-row justify="start">
           <div
             v-for="hiringManager of item.hiringManagers"
@@ -99,7 +100,7 @@
           </div>
         </v-row>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn icon small @click="editJob(item)" v-on="on" v-bind="attrs">
@@ -166,6 +167,7 @@
 
 <script>
 import { useJobListingStore } from "@/stores/job_listing";
+import { useEmploymentTypesStore } from "@/stores/employment_types";
 import JobCreation from "../components/JobCreation.vue";
 export default {
   components: {
@@ -173,8 +175,9 @@ export default {
   },
   setup() {
     const jobListingStore = useJobListingStore();
+    const employmentTypesStore = useEmploymentTypesStore();
 
-    return { jobListingStore };
+    return { jobListingStore, employmentTypesStore };
   },
   data() {
     return {
@@ -234,10 +237,14 @@ export default {
   },
   mounted() {
     this.jobListingStore.getJobs();
+    this.employmentTypesStore.getEmploymentTypes();
   },
   computed: {
     getJobs() {
       return this.jobListingStore.jobs;
+    },
+    getEmploymentTypes() {
+      return this.employmentTypesStore.employmentTypesDropDown;
     },
   },
   methods: {

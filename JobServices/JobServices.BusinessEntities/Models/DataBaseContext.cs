@@ -16,11 +16,6 @@ namespace JobServices.BusinessEntities.Models
             get; set;
         }
 
-        public DbSet<RCMCompensationType> RCMCompensationTypes
-        {
-            get; set;
-        }
-
         public DbSet<RCMEmploymentType> RCMEmploymentTypes
         {
             get; set;

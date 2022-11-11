@@ -57,5 +57,10 @@ namespace JobServices.Application.Requests.Queries.ResponseModel
         {
             get; set;
         }
+
+        public int EmploymentTypeId
+        {
+            get; set;
+        }
     }
 }
